@@ -46,7 +46,6 @@ ifneq (1,$(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= 17 ))" )))
 endif
 
 LOCAL_CFLAGS += -Wall -Wextra -Werror
-LOCAL_CLANG := false
 
 LOCAL_SRC_FILES := $(MM_CAM_FILES)
 
@@ -55,7 +54,7 @@ LOCAL_PRELINK_MODULE   := false
 LOCAL_SHARED_LIBRARIES := libdl libcutils liblog libutils
 LOCAL_MODULE_TAGS := optional
 LOCAL_VENDOR_MODULE := true
-
+LOCAL_CFLAGS  += -Wno-error
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 include $(BUILD_SHARED_LIBRARY)
 
