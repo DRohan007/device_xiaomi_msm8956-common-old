@@ -20,7 +20,6 @@
 #ifndef __QCAMERATRACE_H__
 #define __QCAMERATRACE_H__
 
-#define ATRACE_TAG ATRACE_TAG_CAMERA
 #include <utils/Trace.h>
 
 #undef ATRACE_CALL

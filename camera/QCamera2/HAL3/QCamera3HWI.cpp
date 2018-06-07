@@ -274,15 +274,15 @@ const QCamera3HardwareInterface::QCameraMap<
 };
 
 camera3_device_ops_t QCamera3HardwareInterface::mCameraOps = {
-    initialize:                         QCamera3HardwareInterface::initialize,
-    configure_streams:                  QCamera3HardwareInterface::configure_streams,
-    register_stream_buffers:            NULL,
-    construct_default_request_settings: QCamera3HardwareInterface::construct_default_request_settings,
-    process_capture_request:            QCamera3HardwareInterface::process_capture_request,
-    get_metadata_vendor_tag_ops:        NULL,
-    dump:                               QCamera3HardwareInterface::dump,
-    flush:                              QCamera3HardwareInterface::flush,
-    reserved:                           {0},
+    .initialize =                         QCamera3HardwareInterface::initialize,
+    .configure_streams =                  QCamera3HardwareInterface::configure_streams,
+    .register_stream_buffers =            NULL,
+    .construct_default_request_settings = QCamera3HardwareInterface::construct_default_request_settings,
+    .process_capture_request =            QCamera3HardwareInterface::process_capture_request,
+    .get_metadata_vendor_tag_ops =        NULL,
+    .dump =                               QCamera3HardwareInterface::dump,
+    .flush =                              QCamera3HardwareInterface::flush,
+    .reserved =                           {0},
 };
 
 /*===========================================================================
@@ -968,7 +968,7 @@ int32_t QCamera3HardwareInterface::getSensorOutputSize(cam_dimension_t &sensor_d
  * RETURN     : NULL
  *
  *==========================================================================*/
-void QCamera3HardwareInterface::updatePowerHint(bool bWasVideo, bool bIsVideo)
+void QCamera3HardwareInterface::updatePowerHint(bool bWasVideo __unused, bool bIsVideo __unused)
 {
 #ifdef HAS_MULTIMEDIA_HINTS
     if (bWasVideo == bIsVideo)
@@ -8307,7 +8307,7 @@ bool QCamera3HardwareInterface::needJpegRotation()
  *==========================================================================*/
 QCamera3ReprocessChannel *QCamera3HardwareInterface::addOfflineReprocChannel(
         const reprocess_config_t &config, QCamera3PicChannel *picChHandle,
-        metadata_buffer_t *metadata)
+        metadata_buffer_t *metadata __unused)
 {
     int32_t rc = NO_ERROR;
     QCamera3ReprocessChannel *pChannel = NULL;

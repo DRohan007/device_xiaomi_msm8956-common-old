@@ -508,7 +508,7 @@ void QCameraStream::deleteStream()
  *              none-zero failure code
  *==========================================================================*/
 int32_t QCameraStream::unMapBuf(QCameraMemory *Buf,
-        cam_mapping_buf_type bufType, mm_camera_map_unmap_ops_tbl_t *ops_tbl)
+        cam_mapping_buf_type bufType, mm_camera_map_unmap_ops_tbl_t *ops_tbl __unused)
 {
     int32_t rc = NO_ERROR;
     uint8_t cnt;
@@ -554,7 +554,7 @@ int32_t QCameraStream::unMapBuf(QCameraMemory *Buf,
  *              none-zero failure code
  *==========================================================================*/
 int32_t QCameraStream::mapBufs(QCameraMemory *Buf,
-        cam_mapping_buf_type bufType, mm_camera_map_unmap_ops_tbl_t *ops_tbl)
+        cam_mapping_buf_type bufType, mm_camera_map_unmap_ops_tbl_t *ops_tbl __unused)
 {
     int32_t rc = NO_ERROR;
     ssize_t bufSize = BAD_INDEX;
@@ -1398,11 +1398,11 @@ int32_t QCameraStream::getBufs(cam_frame_len_offset_t *offset,
  *              NO_ERROR  -- success
  *              none-zero failure code
  *==========================================================================*/
-int32_t QCameraStream::getBufsDeferred(cam_frame_len_offset_t *offset,
+int32_t QCameraStream::getBufsDeferred(cam_frame_len_offset_t *offset __unused,
         uint8_t *num_bufs,
         uint8_t **initial_reg_flag,
         mm_camera_buf_def_t **bufs,
-        mm_camera_map_unmap_ops_tbl_t *ops_tbl)
+        mm_camera_map_unmap_ops_tbl_t *ops_tbl __unused)
 {
     // wait for allocation
     mAllocator.waitForBackgroundTask(mAllocTaskId);
@@ -2417,7 +2417,7 @@ int32_t QCameraStream::mapBuf(uint8_t buf_type, uint32_t buf_idx,
  *==========================================================================*/
 
 int32_t QCameraStream::mapBufs(cam_buf_map_type_list bufMapList,
-        mm_camera_map_unmap_ops_tbl_t *ops_tbl)
+        mm_camera_map_unmap_ops_tbl_t *ops_tbl __unused)
 {
     if (m_MemOpsTbl.bundled_map_ops != NULL) {
         return m_MemOpsTbl.bundled_map_ops(&bufMapList, m_MemOpsTbl.userdata);

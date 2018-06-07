@@ -13139,7 +13139,7 @@ void QCameraParameters::setBufBatchCount(int8_t buf_cnt)
  *
  * RETURN     :  error value
  *==========================================================================*/
-int32_t QCameraParameters::setCustomParams(const QCameraParameters& params)
+int32_t QCameraParameters::setCustomParams(const QCameraParameters& params __unused)
 {
     int32_t rc = NO_ERROR;
 

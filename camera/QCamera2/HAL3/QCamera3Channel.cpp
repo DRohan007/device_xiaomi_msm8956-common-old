@@ -1489,7 +1489,7 @@ void QCamera3RawDumpChannel::dumpRawSnapshot(mm_camera_buf_def_t *frame)
  * RETURN          : NA
  *==========================================================================*/
 void QCamera3RawDumpChannel::streamCbRoutine(mm_camera_super_buf_t *super_frame,
-                                                QCamera3Stream *stream)
+                                                QCamera3Stream *stream __unused)
 {
     CDBG("%s: E",__func__);
     if (super_frame == NULL || super_frame->num_bufs != 1) {
@@ -2519,7 +2519,6 @@ int32_t getExifLatitude(rat_t *latitude,
 {
     char str[30];
     snprintf(str, sizeof(str), "%f", value);
-    if(str != NULL) {
         parseGPSCoordinate(str, latitude);
 
         //set Latitude Ref
@@ -2531,9 +2530,6 @@ int32_t getExifLatitude(rat_t *latitude,
         }
         latRef[1] = '\0';
         return NO_ERROR;
-    }else{
-        return BAD_VALUE;
-    }
 }
 
 /*===========================================================================
@@ -2554,7 +2550,6 @@ int32_t getExifLongitude(rat_t *longitude,
 {
     char str[30];
     snprintf(str, sizeof(str), "%f", value);
-    if(str != NULL) {
         parseGPSCoordinate(str, longitude);
 
         //set Longitude Ref
@@ -2566,9 +2561,6 @@ int32_t getExifLongitude(rat_t *longitude,
         }
         lonRef[1] = '\0';
         return NO_ERROR;
-    }else{
-        return BAD_VALUE;
-    }
 }
 
 /*===========================================================================
@@ -2589,7 +2581,6 @@ int32_t getExifAltitude(rat_t *altitude, char *altRef, double argValue)
 {
     char str[30];
     snprintf(str, sizeof(str), "%f", argValue);
-    if (str != NULL) {
         double value = atof(str);
         *altRef = 0;
         if(value < 0){
@@ -2597,9 +2588,6 @@ int32_t getExifAltitude(rat_t *altitude, char *altRef, double argValue)
             value = -value;
         }
         return getRational(altitude, (int)(value * 1000), 1000);
-    } else {
-        return BAD_VALUE;
-    }
 }
 
 /*===========================================================================
@@ -2622,7 +2610,6 @@ int32_t getExifGpsDateTimeStamp(char *gpsDateStamp,
 {
     char str[30];
     snprintf(str, sizeof(str), "%lld", (long long int)value);
-    if(str != NULL) {
         time_t unixTime = (time_t)atol(str);
         struct tm *UTCTimestamp = gmtime(&unixTime);
         if (UTCTimestamp != NULL) {
@@ -2636,9 +2623,6 @@ int32_t getExifGpsDateTimeStamp(char *gpsDateStamp,
             ALOGE("%s: Could not get the timestamp", __func__);
             return BAD_VALUE;
         }
-    } else {
-        return BAD_VALUE;
-    }
 }
 
 int32_t getExifExposureValue(srat_t* exposure_val, int32_t exposure_comp,

@@ -31,6 +31,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <utils/Trace.h>
 #include <utils/Errors.h>
 #include <utils/Log.h>
 #include <gralloc_priv.h>
@@ -1029,7 +1030,7 @@ QCameraStreamMemory::QCameraStreamMemory(camera_request_memory memory,
         void *user,
         bool cached,
         QCameraMemoryPool *pool,
-        cam_stream_type_t streamType, cam_stream_buf_type bufType)
+        cam_stream_type_t streamType, cam_stream_buf_type bufType __unused)
     :QCameraMemory(cached, pool, streamType),
      mGetMemory(memory),
      mCallbackCookie(user)
@@ -1263,9 +1264,7 @@ QCameraVideoMemory::QCameraVideoMemory(camera_request_memory memory,
     : QCameraStreamMemory(memory, user, cached)
 {
     memset(mMetadata, 0, sizeof(mMetadata));
-#ifdef USE_MEDIA_EXTENSIONS
     memset(mNativeHandle, 0, sizeof(mNativeHandle));
-#endif
     mMetaBufCount = 0;
     mBufType = bufType;
     //Set Default color conversion format
@@ -1317,9 +1316,6 @@ int QCameraVideoMemory::allocate(uint8_t count, size_t size, uint32_t isSecure)
         }
         for (int i = 0; i < count; i ++) {
             native_handle_t *nh = NULL;
-#ifdef USE_MEDIA_EXTENSIONS
-            nh =  mNativeHandle[i];
-#else
             struct encoder_media_buffer_type * packet =
                     (struct encoder_media_buffer_type *)mMetadata[i]->data;
             /*data[0] => FD data[1] => OFFSET data[2] => SIZE data[3] => USAGE
@@ -1328,7 +1324,6 @@ int QCameraVideoMemory::allocate(uint8_t count, size_t size, uint32_t isSecure)
                                                       VIDEO_METADATA_NUM_COMMON_INTS);
             packet->buffer_type = kMetadataBufferTypeCameraSource;
             nh = const_cast<native_handle_t *>(packet->meta_handle);
-#endif
             if (!nh) {
                 ALOGE("%s: Error in getting video native handle", __func__);
                 ATRACE_END();
@@ -1457,7 +1452,6 @@ int QCameraVideoMemory::allocateMeta(uint8_t buf_cnt)
             return NO_MEMORY;
         }
 
-#ifdef USE_MEDIA_EXTENSIONS
         media_metadata_buffer *packet = (media_metadata_buffer *)mMetadata[i]->data;
         mNativeHandle[i] = native_handle_create(numFDs, totalInts+VIDEO_METADATA_NUM_COMMON_INTS);
         if (mNativeHandle[i] == NULL) {
@@ -1475,12 +1469,8 @@ int QCameraVideoMemory::allocateMeta(uint8_t buf_cnt)
             native_handle_t *nh =  mNativeHandle[i];
             nh->data[numFDs + totalInts] = i;
         }
-        packet->eType = kMetadataBufferTypeNativeHandleSource;
-        packet->pHandle = NULL;
-#else
         packet->buffer_type = kMetadataBufferTypeCameraSource;
         packet->meta_handle = mNativeHandle[i];
-#endif
     }
     mMetaBufCount = buf_cnt;
     return rc;
